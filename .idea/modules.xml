@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/coinapp.iml" filepath="$PROJECT_DIR$/.idea/coinapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coinclient/coinclient.iml" filepath="$PROJECT_DIR$/coinclient/coinclient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coinserver/coinserver.iml" filepath="$PROJECT_DIR$/coinserver/coinserver.iml" />
+    </modules>
+  </component>
+</project>
