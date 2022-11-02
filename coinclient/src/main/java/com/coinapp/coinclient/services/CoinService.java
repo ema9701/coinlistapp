@@ -27,6 +27,16 @@ public class CoinService {
         return coins;
     }
 
+    public Coin searchCoinOnGecko(String id) {
+        Coin coin = null;
+        try {
+            coin = restTemplate.getForObject(SPRING_URL + "gecko?id=" +id, Coin.class);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return coin;
+    }
+
     public Coin getCoinDetails(Integer coinId) {
         Coin coin = null;
         try {
@@ -40,7 +50,9 @@ public class CoinService {
     public Coin saveCoin(CoinDTO coinDTO) {
         Coin coin = null;
         try {
-            coin = restTemplate.postForObject(SPRING_URL, makeCoinDTOEntity(coinDTO), Coin.class);
+            ResponseEntity<Coin> response =
+            restTemplate.exchange(SPRING_URL,HttpMethod.POST, makeCoinDTOEntity(coinDTO), Coin.class);
+            coin = response.getBody();
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
@@ -50,7 +62,7 @@ public class CoinService {
     public boolean updateCoinData(Coin coin) {
         boolean success = false;
         try {
-            restTemplate.put(SPRING_URL + coin.getId(), makeCoinEntity(coin));
+            restTemplate.put(SPRING_URL + coin.getApiId(), makeCoinEntity(coin));
             success = true;
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());

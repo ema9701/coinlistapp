@@ -11,7 +11,7 @@ public interface CoinDao {
 
     Coin getByEntryId(int coinId);
 
-    Integer createEntry(CoinDTO newCoin);
+    Integer createEntry(Coin newCoin);
 
     boolean updateCoinData(Coin coin, int coinId);
 

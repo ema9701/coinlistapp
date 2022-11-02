@@ -1,14 +1,18 @@
 package com.coinapp.coinserver.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+
 public class CoinDTO {
 
     private String apiId;
+    @NotBlank(message = "Symbol field cannot be blank")
     private String symbol;
+    @NotBlank(message = "Name field cannot be blank")
     private String name;
     private Double currentPrice;
 
-    public CoinDTO(String apiId, String symbol, String name, Double currentPrice) {
-        this.apiId = apiId;
+    public CoinDTO(String symbol, String name, Double currentPrice) {
         this.symbol = symbol;
         this.name = name;
         this.currentPrice = currentPrice;

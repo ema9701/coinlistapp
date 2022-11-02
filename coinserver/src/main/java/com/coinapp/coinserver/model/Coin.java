@@ -20,9 +20,8 @@ public class Coin {
 
     public Coin() {}
 
-    public Coin(Integer coinId, String apiId, String symbol, String name, Double currentPrice) {
+    public Coin(Integer coinId, String symbol, String name, Double currentPrice) {
         this.coinId = coinId;
-        this.apiId = apiId;
         this.symbol = symbol;
         this.name = name;
         this.currentPrice = currentPrice;

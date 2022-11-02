@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -47,9 +48,10 @@ public class CoinController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "")
-    public Coin saveNewCoin(@RequestBody CoinDTO coinDTO) {
-        Integer newId = coinDao.createEntry(coinDTO);
-        if (coinDao.createEntry(coinDTO) == null) {
+    public Coin saveNewCoin(@Valid @RequestBody CoinDTO coinDTO) {
+        Coin newCoin = DTOConv(coinDTO);
+        Integer newId = coinDao.createEntry(newCoin);
+        if (coinDao.getByEntryId(newId) == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return coinDao.getByEntryId(newId);
@@ -73,6 +75,14 @@ public class CoinController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
         coinDao.deleteEntry(coin.getCoinId());
+    }
+
+    private Coin DTOConv(CoinDTO dto) {
+        Coin coin = new Coin();
+        coin.setSymbol(dto.getSymbol());
+        coin.setName(dto.getName());
+        coin.setCurrentPrice(dto.getCurrentPrice());
+        return coin;
     }
 
 }

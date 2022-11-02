@@ -3,30 +3,29 @@ package com.coinapp.coinclient.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class CoinDTO {
 
-    @JsonProperty("coinId")
-    private String id;
-    @JsonProperty("symbol")
+//    @JsonProperty("id")
+    private String apiId;
+//    @JsonProperty("symbol")
     private String symbol;
-    @JsonProperty("name")
+//    @JsonProperty("name")
     private String name;
     private Double currentPrice;
 
-    public CoinDTO(String id, String symbol, String name, Double currentPrice) {
-        this.id = id;
+    public CoinDTO(String symbol, String name, Double currentPrice) {
         this.symbol = symbol;
         this.name = name;
         this.currentPrice = currentPrice;
     }
 
-    public String getId() {
-        return id;
+    public String getApiId() {
+        return apiId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 
     public String getSymbol() {

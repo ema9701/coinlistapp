@@ -61,7 +61,6 @@ public class ConsoleService {
         return scanner.nextLine();
     }
 
-
     public void printError() {
         System.out.println("An error occurred. Please try again.");
     }

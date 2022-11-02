@@ -32,7 +32,7 @@ public class JdbcCoinDao implements CoinDao {
     @Override
     public Coin getByEntryId(int coinId) {
         Coin coin = null;
-        final String sql = " SELECT symbol, coin_name, current_price FROM coin " +
+        final String sql = " SELECT coin_id, symbol, coin_name, current_price FROM coin " +
                 " WHERE coin_id = ?; ";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, coinId);
         if (result.next()) {
@@ -42,9 +42,9 @@ public class JdbcCoinDao implements CoinDao {
     }
 
     @Override
-    public Integer createEntry(CoinDTO newCoin) {
+    public Integer createEntry(Coin newCoin) {
         final String sql = " INSERT INTO coin (symbol, coin_name, current_price) " +
-                " VALUES (?, ?, ?) RETURNING entry_id; ";
+                " VALUES (?, ?, ?) RETURNING coin_id; ";
         Integer newCoinId = jdbcTemplate.queryForObject(sql, Integer.class,
                 newCoin.getSymbol(), newCoin.getName(), newCoin.getCurrentPrice());
         return newCoinId;
