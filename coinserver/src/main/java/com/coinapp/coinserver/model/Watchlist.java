@@ -9,13 +9,8 @@ public class Watchlist {
 
     Integer listId;
     String listName;
-    Map<String, Coin> coinsToWatch;
-
-    public Watchlist(Integer listId, String listName) {
-        this.listId = listId;
-        this.listName = listName;
-        this.coinsToWatch = new HashMap<>();
-    }
+    List<Coin> coinsToWatch = new ArrayList<>();
+//    Map<String, Coin> coinMap = new HashMap<>();
 
     public Watchlist() {}
 
@@ -35,21 +30,21 @@ public class Watchlist {
         this.listName = listName;
     }
 
-    public Map<String, Coin> getCoinsToWatch() {
+    public List<Coin> getCoinsToWatch() {
         return coinsToWatch;
     }
 
-    public void setCoinsToWatch(Map<String, Coin> coinsToWatch) {
+    public void setCoinsToWatch(List<Coin> coinsToWatch) {
         this.coinsToWatch = coinsToWatch;
     }
 
-    public void addCoinsToList(Coin coin) {
-        if (coinsToWatch.containsKey(getListName())) {
-            if (!coinsToWatch.containsValue(coin)) {
-                coinsToWatch.put(getListName(), coin);
-            }
-        }
-    }
+//    public Map<String, Coin> getCoinMap() {
+//        return coinMap;
+//    }
+//
+//    public void setCoinMap(Map<String, Coin> coinMap) {
+//        this.coinMap = coinMap;
+//    }
 
     @Override
     public String toString() {

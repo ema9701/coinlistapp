@@ -2,6 +2,7 @@ package com.coinapp.coinserver.Dao;
 
 import com.coinapp.coinserver.model.Coin;
 import com.coinapp.coinserver.model.CoinDTO;
+import com.coinapp.coinserver.model.Watchlist;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -62,6 +63,19 @@ public class JdbcCoinDao implements CoinDao {
     public boolean deleteEntry(int coinId) {
         final String sql = " DELETE FROM coin WHERE coin_id = ?; ";
         return jdbcTemplate.update(sql, coinId) == 1;
+    }
+
+    @Override
+    public List<Coin> getListEntries(int listId) {
+        List<Coin> savedCoins = new ArrayList<>();
+        final String sql = " SELECT watchlist_coin.coin_id, symbol, coin_name, current_price FROM coin " +
+                " JOIN watchlist_coin ON coin.coin_id = watchlist_coin.coin_id " +
+                " WHERE watchlist_coin.watchlist_id = ?;  ";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, listId);
+        while (results.next()) {
+            savedCoins.add(mapRowToCoin(results));
+        }
+        return savedCoins;
     }
 
     private Coin mapRowToCoin(SqlRowSet rs) {

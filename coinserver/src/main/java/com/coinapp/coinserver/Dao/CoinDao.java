@@ -16,4 +16,7 @@ public interface CoinDao {
     boolean updateCoinData(Coin coin, int coinId);
 
     boolean deleteEntry(int coinId);
+
+    List<Coin> getListEntries(int listId);
+
 }

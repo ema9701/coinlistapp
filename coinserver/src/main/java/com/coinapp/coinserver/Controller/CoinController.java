@@ -2,9 +2,12 @@ package com.coinapp.coinserver.Controller;
 
 
 import com.coinapp.coinserver.Dao.CoinDao;
+import com.coinapp.coinserver.Dao.ListDao;
 import com.coinapp.coinserver.Services.CoinService;
 import com.coinapp.coinserver.model.Coin;
 import com.coinapp.coinserver.model.CoinDTO;
+import com.coinapp.coinserver.model.ListCoinDTO;
+import com.coinapp.coinserver.model.Watchlist;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,10 +20,12 @@ import java.util.List;
 public class CoinController {
 
     private CoinDao coinDao;
+    private ListDao listDao;
     private CoinService coinService;
 
-    public CoinController(CoinDao coinDao, CoinService coinService) {
+    public CoinController(CoinDao coinDao, ListDao listDao, CoinService coinService) {
         this.coinDao = coinDao;
+        this.listDao = listDao;
         this.coinService = coinService;
     }
 
@@ -76,6 +81,30 @@ public class CoinController {
             }
         coinDao.deleteEntry(coin.getCoinId());
     }
+
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PostMapping("/list")
+//    public void addCoinsToList(@RequestParam int listId, @RequestParam int coinId) {
+//        Watchlist w = listDao.getById(listId);
+//        Coin c = coinDao.getByEntryId(coinId);
+//        if (w == null || c == null) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+//        }
+//
+//        coinDao.addEntry(w.getListId(), c.getCoinId());
+//    }
+//
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @DeleteMapping("/list/{listId}/coin/{coinId}")
+//    public void deleteEntries(@PathVariable int listId, @PathVariable int coinId) {
+//        Watchlist w = listDao.getById(listId);
+//        Coin c = coinDao.getByEntryId(coinId);
+//        if (w == null || c == null) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        }
+//        coinDao.removeEntry(listId, coinId);
+//    }
+
 
     private Coin DTOConv(CoinDTO dto) {
         Coin coin = new Coin();
