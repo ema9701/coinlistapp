@@ -18,7 +18,8 @@ public class Coin {
     private MarketData marketData;
     private Double currentPrice;
 
-    public Coin() {}
+    public Coin() {
+    }
 
     public Coin(Integer coinId, String symbol, String name, Double currentPrice) {
         this.coinId = coinId;

@@ -11,7 +11,8 @@ public class ListCoinDTO {
     @Min(value = 1, message = "must be a valid coin id")
     private Integer coinId;
 
-    public ListCoinDTO() {}
+    public ListCoinDTO() {
+    }
 
     public ListCoinDTO(Integer listId, Integer coinId) {
         this.listId = listId;
@@ -33,7 +34,6 @@ public class ListCoinDTO {
     public void setCoinId(Integer coinId) {
         this.coinId = coinId;
     }
-
 
 
 }

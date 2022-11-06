@@ -76,35 +76,11 @@ public class CoinController {
     @DeleteMapping(path = "/{id}")
     public void deleteCoin(@PathVariable int id) {
         Coin coin = coinDao.getByEntryId(id);
-            if (coin == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
+        if (coin == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         coinDao.deleteEntry(coin.getCoinId());
     }
-
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @PostMapping("/list")
-//    public void addCoinsToList(@RequestParam int listId, @RequestParam int coinId) {
-//        Watchlist w = listDao.getById(listId);
-//        Coin c = coinDao.getByEntryId(coinId);
-//        if (w == null || c == null) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        coinDao.addEntry(w.getListId(), c.getCoinId());
-//    }
-//
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    @DeleteMapping("/list/{listId}/coin/{coinId}")
-//    public void deleteEntries(@PathVariable int listId, @PathVariable int coinId) {
-//        Watchlist w = listDao.getById(listId);
-//        Coin c = coinDao.getByEntryId(coinId);
-//        if (w == null || c == null) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-//        }
-//        coinDao.removeEntry(listId, coinId);
-//    }
-
 
     private Coin DTOConv(CoinDTO dto) {
         Coin coin = new Coin();

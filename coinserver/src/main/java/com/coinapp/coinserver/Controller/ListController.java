@@ -26,27 +26,22 @@ public class ListController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "")
     public List<Watchlist> list() {
-        return listDao.listAll();
+        List<Watchlist> lists = listDao.listAll();
+        for (Watchlist w : lists) {
+            w.setCoinsToWatch(coinDao.getListEntries(w.getListId()));
+        }
+        return lists;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/{id}")
     public Watchlist getListId(@PathVariable(name = "id") int listId) {
-        if (listId == -1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return listDao.getById(listId);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}/entries")
-    public List<Coin> coinsByListId(@PathVariable(name="id") int listId) {
         Watchlist w = listDao.getById(listId);
         if (w == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        w.setCoinsToWatch(coinDao.getListEntries(listId));
-        return w.getCoinsToWatch();
+        w.setCoinsToWatch(coinDao.getListEntries(w.getListId()));
+        return w;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,11 +57,11 @@ public class ListController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{id}")
-    public void deleteList(@PathVariable(name="id") int listId) {
+    public void deleteList(@PathVariable(name = "id") int listId) {
         Watchlist w = listDao.getById(listId);
-            if (w == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
+        if (w == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         listDao.deleteList(w.getListId());
     }
 
@@ -78,8 +73,8 @@ public class ListController {
         if (w == null || c == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        w.getCoinsToWatch().add(c);
         listDao.addEntry(w.getListId(), c.getCoinId());
+        w.setCoinsToWatch(coinDao.getListEntries(w.getListId()));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -90,7 +85,7 @@ public class ListController {
         if (w == null || c == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        w.getCoinsToWatch().remove(c);
         listDao.removeEntry(listId, coinId);
+        w.setCoinsToWatch(coinDao.getListEntries(w.getListId()));
     }
 }

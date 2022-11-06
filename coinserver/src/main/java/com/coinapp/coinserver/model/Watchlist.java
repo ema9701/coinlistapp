@@ -12,7 +12,8 @@ public class Watchlist {
     List<Coin> coinsToWatch = new ArrayList<>();
 //    Map<String, Coin> coinMap = new HashMap<>();
 
-    public Watchlist() {}
+    public Watchlist() {
+    }
 
     public Integer getListId() {
         return listId;

@@ -14,7 +14,9 @@ public class JdbcListDao implements ListDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcListDao(JdbcTemplate jdbcTemplate) {this.jdbcTemplate = jdbcTemplate;}
+    public JdbcListDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public List<Watchlist> listAll() {

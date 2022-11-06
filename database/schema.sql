@@ -35,7 +35,11 @@ VALUES ('ListOne'),('ListTwo');
 
 INSERT INTO watchlist_coin (watchlist_id, coin_id)
 VALUES ((SELECT list_id FROM watchlist WHERE list_name = 'ListOne'), (SELECT coin_id FROM coin WHERE coin_name = 'TestingCoin')),
-       ((SELECT list_id FROM watchlist WHERE list_name = 'ListOne'), (SELECT coin_id FROM coin WHERE coin_name = 'StuffCoin'));
+       ((SELECT list_id FROM watchlist WHERE list_name = 'ListOne'), (SELECT coin_id FROM coin WHERE coin_name = 'StuffCoin')),
+       ((SELECT list_id FROM watchlist WHERE list_name = 'ListOne'), (SELECT coin_id FROM coin WHERE coin_name = 'Bitcoin')),
+       ((SELECT list_id FROM watchlist WHERE list_name = 'ListTwo'), (SELECT coin_id FROM coin WHERE coin_name = 'Ethereum')),
+       ((SELECT list_id FROM watchlist WHERE list_name = 'ListTwo'), (SELECT coin_id FROM coin WHERE coin_name = 'Cardano')),
+       ((SELECT list_id FROM watchlist WHERE list_name = 'ListTwo'), (SELECT coin_id FROM coin WHERE coin_name = 'Solana'));
 
 -- ROLLBACK;
 COMMIT TRANSACTION;
