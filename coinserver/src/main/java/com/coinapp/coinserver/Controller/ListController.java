@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/watchlist")
+@RequestMapping("/list")
 public class ListController {
 
     private ListDao listDao;
@@ -46,13 +46,8 @@ public class ListController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "")
-    public boolean createNewList(@RequestParam String name) {
-        boolean success = false;
-        Watchlist newList = listDao.createList(name);
-        if (newList != null) {
-            success = true;
-        }
-        return success;
+    public Watchlist createNewList(@RequestParam String name) {
+        return listDao.createList(name);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

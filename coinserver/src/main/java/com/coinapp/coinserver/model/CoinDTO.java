@@ -5,6 +5,7 @@ import javax.validation.constraints.Positive;
 
 public class CoinDTO {
 
+
     private String apiId;
     @NotBlank(message = "Symbol field cannot be blank")
     private String symbol;

@@ -4,6 +4,7 @@ package com.coinapp.coinclient.services;
 
 import com.coinapp.coinclient.model.Coin;
 import com.coinapp.coinclient.model.CoinList;
+import com.coinapp.coinclient.model.Watchlist;
 
 import java.util.Scanner;
 
@@ -28,7 +29,8 @@ public class ConsoleService {
         System.out.println("==========================");
         System.out.println("1. Search for currency by ID.");
         System.out.println("2. List saved coins.");
-        System.out.println("3. Create new watchlist.");
+        System.out.println("3. View Saved Lists.");
+        System.out.println("4. Create new watchlist.");
         System.out.println("0. Exit");
 
     }
@@ -47,6 +49,22 @@ public class ConsoleService {
         if (coins != null) {
             for (Coin coin : coins) {
                 System.out.println(coin.getName());
+            }
+        }
+    }
+
+    public void printSavedLists(Watchlist[] lists) {
+        if (lists != null) {
+            for (Watchlist w : lists) {
+                System.out.println(w.getListName());
+            }
+        }
+    }
+
+    public void printCoinEntriesOnList(Watchlist list) {
+        if (list != null) {
+            for (Coin coin : list.getCoinsToWatch()) {
+                System.out.println(coin);
             }
         }
     }

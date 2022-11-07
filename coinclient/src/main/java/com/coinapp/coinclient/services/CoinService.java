@@ -13,14 +13,14 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class CoinService {
 
-    private static final String SPRING_URL = "http://localhost:8080/coins/";
+    private static final String COIN_URL = "http://localhost:8080/coins/";
     private final RestTemplate restTemplate = new RestTemplate();
 
 
     public Coin[] listSavedCoins() {
         Coin[] coins = null;
         try {
-            coins = restTemplate.getForObject(SPRING_URL, Coin[].class);
+            coins = restTemplate.getForObject(COIN_URL, Coin[].class);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
@@ -30,7 +30,7 @@ public class CoinService {
     public Coin searchCoinOnGecko(String id) {
         Coin coin = null;
         try {
-            coin = restTemplate.getForObject(SPRING_URL + "gecko?id=" +id, Coin.class);
+            coin = restTemplate.getForObject(COIN_URL + "gecko?id=" +id, Coin.class);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
@@ -40,7 +40,7 @@ public class CoinService {
     public Coin getCoinDetails(Integer coinId) {
         Coin coin = null;
         try {
-            coin = restTemplate.getForObject(SPRING_URL + coinId, Coin.class);
+            coin = restTemplate.getForObject(COIN_URL + coinId, Coin.class);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
@@ -51,7 +51,7 @@ public class CoinService {
         Coin coin = null;
         try {
             ResponseEntity<Coin> response =
-            restTemplate.exchange(SPRING_URL,HttpMethod.POST, makeCoinDTOEntity(coinDTO), Coin.class);
+            restTemplate.exchange(COIN_URL,HttpMethod.POST, makeCoinDTOEntity(coinDTO), Coin.class);
             coin = response.getBody();
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
@@ -62,7 +62,7 @@ public class CoinService {
     public boolean updateCoinData(Coin coin) {
         boolean success = false;
         try {
-            restTemplate.put(SPRING_URL + coin.getApiId(), makeCoinEntity(coin));
+            restTemplate.put(COIN_URL + coin.getApiId(), makeCoinEntity(coin));
             success = true;
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
@@ -73,7 +73,7 @@ public class CoinService {
     public boolean deleteCoinEntry(Integer coinId) {
         boolean success = false;
         try {
-            restTemplate.delete(SPRING_URL + coinId, makeCoinEntity(getCoinDetails(coinId)));
+            restTemplate.delete(COIN_URL + coinId, makeCoinEntity(getCoinDetails(coinId)));
             success = true;
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());

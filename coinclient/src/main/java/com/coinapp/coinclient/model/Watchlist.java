@@ -7,33 +7,33 @@ import java.util.Map;
 
 public class Watchlist {
 
-    Integer id;
-    String name;
-    Map<Integer, Coin> savedCoins = new HashMap<>();
+    Integer listId;
+    String listName;
+    List<Coin> coinsToWatch = new ArrayList<>();
 
     public Watchlist() {}
 
-    public String getName() {
-        return name;
+    public String getListName() {
+        return listName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setListName(String listName) {
+        this.listName = listName;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getListId() {
+        return listId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setListId(Integer listId) {
+        this.listId = listId;
     }
 
-    public Map<Integer, Coin> getSavedCoins() {
-        return savedCoins;
+    public List<Coin> getCoinsToWatch() {
+        return coinsToWatch;
     }
 
-    public void setSavedCoins(Map<Integer, Coin> savedCoins) {
-        this.savedCoins = savedCoins;
+    public void setCoinsToWatch(List<Coin> coinsToWatch) {
+        this.coinsToWatch = coinsToWatch;
     }
 }

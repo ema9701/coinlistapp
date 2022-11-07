@@ -2,16 +2,20 @@ package com.coinapp.coinclient;
 
 import com.coinapp.coinclient.model.Coin;
 import com.coinapp.coinclient.model.CoinDTO;
+import com.coinapp.coinclient.model.Watchlist;
 import com.coinapp.coinclient.services.ConsoleService;
 import com.coinapp.coinclient.services.CoinService;
+import com.coinapp.coinclient.services.WatchlistService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 @SpringBootApplication
 public class CoinClientApp {
 
     ConsoleService console = new ConsoleService();
     CoinService coinService = new CoinService();
+    WatchlistService listService = new WatchlistService();
 
 
     public static void main(String[] args) {
@@ -29,6 +33,10 @@ public class CoinClientApp {
                 searchForCoin();
             } else if (menuSelection == 2) {
                 handleCoinEntries();
+            } else if (menuSelection == 3) {
+                printAllLists();
+            } else if (menuSelection == 4) {
+                createList();
             } else if (menuSelection == 0) {
                 continue;
             } else {
@@ -65,6 +73,19 @@ public class CoinClientApp {
     private void handleCoinEntries() {
         Coin[] coins = coinService.listSavedCoins();
         console.printDBEntries(coins);
+    }
+
+    private void printAllLists() {
+        Watchlist[] lists = listService.getAllLists();
+        console.printSavedLists(lists);
+    }
+
+    private void createList() {
+        String title = console.promptForString("Enter a name for the list: ");
+        Watchlist newList = listService.createNewList(title);
+        if (newList != null) {
+            console.printCoinEntriesOnList(newList);
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.coinapp.coinserver.model;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,9 +9,10 @@ import java.util.Map;
 public class Watchlist {
 
     Integer listId;
+    @NotBlank(message = "New list must have a name")
     String listName;
     List<Coin> coinsToWatch = new ArrayList<>();
-//    Map<String, Coin> coinMap = new HashMap<>();
+
 
     public Watchlist() {
     }
@@ -38,14 +40,6 @@ public class Watchlist {
     public void setCoinsToWatch(List<Coin> coinsToWatch) {
         this.coinsToWatch = coinsToWatch;
     }
-
-//    public Map<String, Coin> getCoinMap() {
-//        return coinMap;
-//    }
-//
-//    public void setCoinMap(Map<String, Coin> coinMap) {
-//        this.coinMap = coinMap;
-//    }
 
     @Override
     public String toString() {
