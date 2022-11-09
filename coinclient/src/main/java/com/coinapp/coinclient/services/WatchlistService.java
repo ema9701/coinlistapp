@@ -1,14 +1,15 @@
 package com.coinapp.coinclient.services;
 
+import com.coinapp.coinclient.model.Coin;
+import com.coinapp.coinclient.model.CoinListDTO;
 import com.coinapp.coinclient.model.Watchlist;
 import com.coinapp.coinclient.util.BasicLogger;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.crypto.Data;
 
@@ -51,6 +52,19 @@ public class WatchlistService {
         return response;
     }
 
+    public Watchlist saveCoinToList(int listId, int coinId) {
+        Watchlist watchlist = null;
+        try {
+            ResponseEntity<Watchlist> response =
+            restTemplate.exchange(LIST_URL + "/entry", HttpMethod.POST,
+                    makeCoinListEntity(listId, coinId), Watchlist.class);
+            watchlist = response.getBody();
+        } catch (RestClientResponseException | ResponseStatusException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return watchlist;
+    }
+
     public boolean deleteList(int listId) {
         boolean success = false;
         try {
@@ -73,10 +87,16 @@ public class WatchlistService {
         return success;
     }
 
+
+    private HttpEntity<CoinListDTO> makeCoinListEntity(int listId, int coinId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(new CoinListDTO(listId, coinId), headers);
+    }
+
     private HttpEntity<Watchlist> makeListEntity(Watchlist newList) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(newList, headers);
     }
-
 }

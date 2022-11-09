@@ -81,7 +81,6 @@ public class CoinService {
         return success;
     }
 
-
     private HttpEntity<CoinDTO> makeCoinDTOEntity(CoinDTO coin) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

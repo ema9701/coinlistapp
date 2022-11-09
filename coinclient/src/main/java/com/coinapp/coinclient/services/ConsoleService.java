@@ -1,7 +1,6 @@
 package com.coinapp.coinclient.services;
 
 
-
 import com.coinapp.coinclient.model.Coin;
 import com.coinapp.coinclient.model.CoinList;
 import com.coinapp.coinclient.model.Watchlist;
@@ -24,12 +23,12 @@ public class ConsoleService {
     }
 
     public void mainMenuList() {
-        System.out.println("==========================");
+        System.out.println("=============================");
         System.out.println("   Watchlist API Client   ");
-        System.out.println("==========================");
+        System.out.println("=============================");
         System.out.println("1. Search for currency by ID.");
-        System.out.println("2. List saved coins.");
-        System.out.println("3. View Saved Lists.");
+        System.out.println("2. View Coins in Database.");
+        System.out.println("3. View Coins By Saved Lists.");
         System.out.println("4. Create new watchlist.");
         System.out.println("0. Exit");
 
@@ -38,9 +37,9 @@ public class ConsoleService {
     public void printCoinData(Coin coin, String id) {
         if (coin != null) {
             String msg = "Recent Coin Data for: " + id;
-            System.out.println("=============================");
+            System.out.println("==============================");
             System.out.println(msg);
-            System.out.println("=============================");
+            System.out.println("==============================");
             System.out.println(coin.toString());
         }
     }
@@ -55,17 +54,29 @@ public class ConsoleService {
 
     public void printSavedLists(Watchlist[] lists) {
         if (lists != null) {
+            System.out.println("=============================");
             for (Watchlist w : lists) {
-                System.out.println(w.getListName());
+                System.out.println(w.toString());
             }
+            System.out.println("============================");
         }
     }
 
     public void printCoinEntriesOnList(Watchlist list) {
         if (list != null) {
-            for (Coin coin : list.getCoinsToWatch()) {
-                System.out.println(coin);
+            System.out.println("============================");
+            System.out.println(list.getListName());
+            if (list.getCoinsToWatch().isEmpty()) {
+                System.out.println("No coins saved to this list.");
+            } else {
+                for (Coin coin : list.getCoinsToWatch()) {
+                    System.out.println("Id: " + coin.getCoinId() +
+                            "\nSymbol: " + coin.getSymbol() +
+                            "\nName: " + coin.getName() +
+                            "\nCurrentPrice: " + coin.getCurrentPrice());
+                }
             }
+            System.out.println("============================");
         }
     }
 

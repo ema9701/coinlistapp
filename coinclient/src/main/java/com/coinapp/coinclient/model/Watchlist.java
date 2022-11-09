@@ -36,4 +36,11 @@ public class Watchlist {
     public void setCoinsToWatch(List<Coin> coinsToWatch) {
         this.coinsToWatch = coinsToWatch;
     }
+
+    @Override
+    public String toString() {
+        return getListId() + "." + getListName();
+    }
+
+
 }

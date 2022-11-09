@@ -4,11 +4,13 @@ package com.coinapp.coinserver.Controller;
 import com.coinapp.coinserver.Dao.CoinDao;
 import com.coinapp.coinserver.Dao.ListDao;
 import com.coinapp.coinserver.model.Coin;
+import com.coinapp.coinserver.model.ListCoinDTO;
 import com.coinapp.coinserver.model.Watchlist;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -62,14 +64,15 @@ public class ListController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/entry")
-    public void addCoinsToList(@RequestParam int listId, @RequestParam int coinId) {
-        Watchlist w = listDao.getById(listId);
-        Coin c = coinDao.getByEntryId(coinId);
+    public Watchlist addCoinsToList(@Valid @RequestBody ListCoinDTO listCoin) {
+        Watchlist w = listDao.getById(listCoin.getListId());
+        Coin c = coinDao.getByEntryId(listCoin.getCoinId());
         if (w == null || c == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         listDao.addEntry(w.getListId(), c.getCoinId());
         w.setCoinsToWatch(coinDao.getListEntries(w.getListId()));
+        return w;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

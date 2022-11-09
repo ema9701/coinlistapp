@@ -6,9 +6,13 @@ import com.coinapp.coinclient.model.Watchlist;
 import com.coinapp.coinclient.services.ConsoleService;
 import com.coinapp.coinclient.services.CoinService;
 import com.coinapp.coinclient.services.WatchlistService;
+import org.apache.http.HttpException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
 
 @SpringBootApplication
 public class CoinClientApp {
@@ -27,14 +31,13 @@ public class CoinClientApp {
         int menuSelection = -1;
         while (menuSelection != 0) {
             console.mainMenuList();
-            menuSelection = console.promptForMenuSelection("Please select a service: "
-            );
+            menuSelection = console.promptForMenuSelection("Please select a service: ");
             if (menuSelection == 1) {
-                searchForCoin();
+                searchForCoinAndSave();
             } else if (menuSelection == 2) {
-                handleCoinEntries();
+                listCoinsInDatabase();
             } else if (menuSelection == 3) {
-                printAllLists();
+                viewListsAndSavedCoins();
             } else if (menuSelection == 4) {
                 createList();
             } else if (menuSelection == 0) {
@@ -46,38 +49,43 @@ public class CoinClientApp {
         }
     }
 
-    private void searchForCoin() {
-        String idSearch = console.promptForString("Search for a coin by id: ");
+    private void searchForCoinAndSave() {
         try {
+            String idSearch = console.promptForString("Search for a coin by id: ");
             Coin response = coinService.searchCoinOnGecko(idSearch);
             console.printCoinData(response, response.getApiId());
             String addToDB = console.promptForString("Add listing to database? (Y/N)");
-                if (addToDB.equalsIgnoreCase("y")) {
-                    double price = response.getMarketData().getCurrentPrice().get("usd");
-                    CoinDTO entry = new CoinDTO(response.getSymbol(), response.getName(), price);
-                    Coin savedCoin = coinService.getCoinDetails(coinService.saveCoin(entry).getCoinId());
-                    if (savedCoin != null) {
-                        System.out.println(savedCoin.getCoinId() +
-                                    "\n" + savedCoin.getSymbol() +
-                                    "\n" + savedCoin.getName() +
-                                    "\n" + savedCoin.getCurrentPrice());
-                        }
-                } else if (addToDB.equalsIgnoreCase("n")) {
-                    return;
-                }
-        } catch (HttpClientErrorException e) {
-            e.getMessage();
+            if (addToDB.equalsIgnoreCase("y")) {
+                console.printSavedLists(listService.getAllLists());
+                Integer listId = console.promptForMenuSelection("Select a list id to save the coin: ");
+                saveCoinToList(response, listId);
+            } else if (addToDB.equalsIgnoreCase("n")) {
+                return;
+            }
+        } catch (Exception e) {
+            console.printError();
         }
     }
 
-    private void handleCoinEntries() {
-        Coin[] coins = coinService.listSavedCoins();
-        console.printDBEntries(coins);
+    private void saveCoinToList(Coin coinToSave, int listId) {
+        double price = coinToSave.getMarketData().getCurrentPrice().get("usd");
+        CoinDTO newEntry = new CoinDTO(coinToSave.getSymbol(), coinToSave.getName(), price);
+        Coin saved = coinService.getCoinDetails(coinService.saveCoin(newEntry).getCoinId());
+        Watchlist w = listService.saveCoinToList(listId, saved.getCoinId());
+        console.printCoinEntriesOnList(w);
     }
 
-    private void printAllLists() {
+    private void viewListsAndSavedCoins() {
+        Watchlist w = null;
         Watchlist[] lists = listService.getAllLists();
         console.printSavedLists(lists);
+        Integer selection = console.promptForMenuSelection("Select a list by id to review: ");
+        try {
+            w = listService.getByListId(selection);
+        } catch (NumberFormatException e) {
+            console.printError();
+        }
+        console.printCoinEntriesOnList(w);
     }
 
     private void createList() {
@@ -88,7 +96,13 @@ public class CoinClientApp {
         }
     }
 
+    private void listCoinsInDatabase() {
+        Coin[] coins = coinService.listSavedCoins();
+        console.printDBEntries(coins);
+    }
 
 }
+
+
 
 

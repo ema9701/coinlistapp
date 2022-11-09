@@ -3,12 +3,13 @@ package com.coinapp.coinserver.model;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class ListCoinDTO {
 
-    @Min(value = 1, message = "must be a valid list id")
+    @NotNull
     private Integer listId;
-    @Min(value = 1, message = "must be a valid coin id")
+    @NotNull
     private Integer coinId;
 
     public ListCoinDTO() {

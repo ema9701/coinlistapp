@@ -8,11 +8,16 @@ import com.coinapp.coinserver.model.Coin;
 import com.coinapp.coinserver.model.CoinDTO;
 import com.coinapp.coinserver.model.ListCoinDTO;
 import com.coinapp.coinserver.model.Watchlist;
+import com.coinapp.coinserver.util.GeckoServerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.ServerErrorException;
 
 import javax.validation.Valid;
+import java.nio.file.InvalidPathException;
 import java.util.List;
 
 @RestController
@@ -32,7 +37,13 @@ public class CoinController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/gecko")
     public Coin searchForCoin(@RequestParam(value = "id") String apiId) {
-        return coinService.getCoinById(apiId);
+        Coin coin = null;
+        try {
+            coin = coinService.getCoinById(apiId);
+        } catch (InvalidPathException e) {
+            System.out.println("\nCoin could not be found at path");
+        }
+        return coin;
     }
 
     @ResponseStatus(HttpStatus.OK)

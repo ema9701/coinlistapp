@@ -86,5 +86,4 @@ public class Coin {
                 "\n 24-hour High Price: " + marketData.getHigh24h().get("usd");
     }
 
-
 }
