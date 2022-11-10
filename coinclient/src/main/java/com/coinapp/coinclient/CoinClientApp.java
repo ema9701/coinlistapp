@@ -35,7 +35,7 @@ public class CoinClientApp {
             if (menuSelection == 1) {
                 searchForCoinAndSave();
             } else if (menuSelection == 2) {
-                listCoinsInDatabase();
+                console.printDBEntries(coinService.listSavedCoins());
             } else if (menuSelection == 3) {
                 viewListsAndSavedCoins();
             } else if (menuSelection == 4) {
@@ -44,6 +44,25 @@ public class CoinClientApp {
                 continue;
             } else {
                 System.out.println("Invalid selection.");
+            }
+            console.pause();
+        }
+    }
+
+    private void listMenu() {
+        int menuSelection = -1;
+        while (menuSelection != 0) {
+            console.mainMenuList();
+            menuSelection = console.promptForMenuSelection("Select a list action: ");
+            if (menuSelection == 1) {
+            } else if (menuSelection == 2) {
+
+            } else if (menuSelection == 3) {
+                handleListDeletion();
+            } else if (menuSelection == 0) {
+                continue;
+            } else {
+                System.out.println("Invalid selection");
             }
             console.pause();
         }
@@ -77,8 +96,7 @@ public class CoinClientApp {
 
     private void viewListsAndSavedCoins() {
         Watchlist w = null;
-        Watchlist[] lists = listService.getAllLists();
-        console.printSavedLists(lists);
+        console.printSavedLists(listService.getAllLists());
         Integer selection = console.promptForMenuSelection("Select a list by id to review: ");
         try {
             w = listService.getByListId(selection);
@@ -96,11 +114,25 @@ public class CoinClientApp {
         }
     }
 
-    private void listCoinsInDatabase() {
-        Coin[] coins = coinService.listSavedCoins();
-        console.printDBEntries(coins);
+    private void removeCoinsFromList(int listId, int coinId) {
+        console.printCoinEntriesOnList(listService.getByListId(listId));
+        System.out.println("Select a coin by id to remove: ");
+        if (listService.deleteCoinOnList(listId, coinId)) {
+            System.out.println("Coin successfully removed");
+        } else {
+            console.printError();
+        }
     }
 
+    private void handleListDeletion() {
+        console.printSavedLists(listService.getAllLists());
+        int listId = console.promptForMenuSelection("Select a list by id to delete: ");
+        if (listService.deleteList(listId)) {
+            System.out.println("Delete successful");
+        } else {
+            console.printError();
+        }
+    }
 }
 
 

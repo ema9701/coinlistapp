@@ -24,7 +24,7 @@ public class ConsoleService {
 
     public void mainMenuList() {
         System.out.println("=============================");
-        System.out.println("   Watchlist API Client   ");
+        System.out.println("     Watchlist API Client    ");
         System.out.println("=============================");
         System.out.println("1. Search for currency by ID.");
         System.out.println("2. View Coins in Database.");
@@ -32,6 +32,15 @@ public class ConsoleService {
         System.out.println("4. Create new watchlist.");
         System.out.println("0. Exit");
 
+    }
+
+    public void listMenu() {
+        System.out.println("=============================");
+        System.out.println("      Watchlist Actions      ");
+        System.out.println("=============================");
+        System.out.println("1. Create new list.");
+        System.out.println("2. Edit list entries.");
+        System.out.println("3. Delete list. ");
     }
 
     public void printCoinData(Coin coin, String id) {
