@@ -6,13 +6,7 @@ import com.coinapp.coinclient.model.Watchlist;
 import com.coinapp.coinclient.services.ConsoleService;
 import com.coinapp.coinclient.services.CoinService;
 import com.coinapp.coinclient.services.WatchlistService;
-import org.apache.http.HttpException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.io.IOException;
 
 @SpringBootApplication
 public class CoinClientApp {
@@ -30,16 +24,14 @@ public class CoinClientApp {
     private void run() {
         int menuSelection = -1;
         while (menuSelection != 0) {
-            console.mainMenuList();
+            console.printMainMenu();
             menuSelection = console.promptForMenuSelection("Please select a service: ");
             if (menuSelection == 1) {
-                searchForCoinAndSave();
+                handleCoinSearchAndSave();
             } else if (menuSelection == 2) {
                 console.printDBEntries(coinService.listSavedCoins());
             } else if (menuSelection == 3) {
-                viewListsAndSavedCoins();
-            } else if (menuSelection == 4) {
-                createList();
+                watchlistMenu();
             } else if (menuSelection == 0) {
                 continue;
             } else {
@@ -49,14 +41,15 @@ public class CoinClientApp {
         }
     }
 
-    private void listMenu() {
+    private void watchlistMenu() {
         int menuSelection = -1;
         while (menuSelection != 0) {
-            console.mainMenuList();
+            console.printWatchlistMenu();
             menuSelection = console.promptForMenuSelection("Select a list action: ");
             if (menuSelection == 1) {
+                handleNewListCreation();
             } else if (menuSelection == 2) {
-
+                handleListViewAndEditing();
             } else if (menuSelection == 3) {
                 handleListDeletion();
             } else if (menuSelection == 0) {
@@ -68,7 +61,7 @@ public class CoinClientApp {
         }
     }
 
-    private void searchForCoinAndSave() {
+    private void handleCoinSearchAndSave() {
         try {
             String idSearch = console.promptForString("Search for a coin by id: ");
             Coin response = coinService.searchCoinOnGecko(idSearch);
@@ -76,8 +69,8 @@ public class CoinClientApp {
             String addToDB = console.promptForString("Add listing to database? (Y/N)");
             if (addToDB.equalsIgnoreCase("y")) {
                 console.printSavedLists(listService.getAllLists());
-                Integer listId = console.promptForMenuSelection("Select a list id to save the coin: ");
-                saveCoinToList(response, listId);
+                int listId = console.promptForMenuSelection("Select a list id to save the coin: ");
+                handleNewListEntry(response, listId);
             } else if (addToDB.equalsIgnoreCase("n")) {
                 return;
             }
@@ -86,7 +79,7 @@ public class CoinClientApp {
         }
     }
 
-    private void saveCoinToList(Coin coinToSave, int listId) {
+    private void handleNewListEntry(Coin coinToSave, int listId) {
         double price = coinToSave.getMarketData().getCurrentPrice().get("usd");
         CoinDTO newEntry = new CoinDTO(coinToSave.getSymbol(), coinToSave.getName(), price);
         Coin saved = coinService.getCoinDetails(coinService.saveCoin(newEntry).getCoinId());
@@ -94,19 +87,25 @@ public class CoinClientApp {
         console.printCoinEntriesOnList(w);
     }
 
-    private void viewListsAndSavedCoins() {
+    private void handleListViewAndEditing() {
         Watchlist w = null;
         console.printSavedLists(listService.getAllLists());
-        Integer selection = console.promptForMenuSelection("Select a list by id to review: ");
+        int selection = console.promptForMenuSelection("Select a list by id to review: ");
         try {
             w = listService.getByListId(selection);
         } catch (NumberFormatException e) {
             console.printError();
         }
         console.printCoinEntriesOnList(w);
+        if (console.promptForString("Edit list entries Y/N? ").equalsIgnoreCase("y")) {
+            int coinId = console.promptForMenuSelection("Coin id to remove: ");
+            handleListEntryRemoval(w.getListId(), coinId);
+        } else {
+            return;
+        }
     }
 
-    private void createList() {
+    private void handleNewListCreation() {
         String title = console.promptForString("Enter a name for the list: ");
         Watchlist newList = listService.createNewList(title);
         if (newList != null) {
@@ -114,9 +113,7 @@ public class CoinClientApp {
         }
     }
 
-    private void removeCoinsFromList(int listId, int coinId) {
-        console.printCoinEntriesOnList(listService.getByListId(listId));
-        System.out.println("Select a coin by id to remove: ");
+    private void handleListEntryRemoval(int listId, int coinId) {
         if (listService.deleteCoinOnList(listId, coinId)) {
             System.out.println("Coin successfully removed");
         } else {

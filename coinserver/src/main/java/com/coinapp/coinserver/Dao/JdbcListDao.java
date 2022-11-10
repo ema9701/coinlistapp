@@ -51,32 +51,30 @@ public class JdbcListDao implements ListDao {
 
     @Override
     public void deleteList(int listId) {
-        final String sql = " DELETE FROM watchlist WHERE list_id = ?; ";
-        jdbcTemplate.update(sql, listId);
+        final String sqlCW = " DELETE FROM watchlist_coin WHERE watchlist_id = ?; ";
+        jdbcTemplate.update(sqlCW, listId);
+        final String sqlW = " DELETE FROM watchlist WHERE list_id = ?; ";
+        jdbcTemplate.update(sqlW, listId);
     }
-
 
     @Override
     public boolean addEntry(int listId, int coinId) {
         final String sql = " INSERT INTO watchlist_coin (watchlist_id, coin_id) " +
                 " VALUES (?, ?); ";
-
         return jdbcTemplate.update(sql, listId, coinId) == 1;
     }
 
     @Override
     public void removeEntry(int listId, int coinId) {
         final String sql = " DELETE FROM watchlist_coin WHERE " +
-                " coin_id = ? AND watchlist_id = ?; ";
+                " watchlist_id = ? AND coin_id = ?; ";
         jdbcTemplate.update(sql, listId, coinId);
     }
-
 
     private Watchlist mapRowToWatchlist(SqlRowSet rs) {
         Watchlist w = new Watchlist();
         w.setListId(rs.getInt("list_id"));
         w.setListName(rs.getString("list_name"));
-
         return w;
     }
 
