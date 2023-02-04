@@ -58,7 +58,7 @@
       <recent name="com.coinapp.coinclient.model" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CoinServerApp">
+  <component name="RunManager" selected="Application.CoinClientApp">
     <configuration name="CoinClientApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.coinapp.coinclient.CoinClientApp" />
       <module name="coinclient" />
@@ -87,8 +87,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.CoinServerApp" />
         <item itemvalue="Application.CoinClientApp" />
+        <item itemvalue="Application.CoinServerApp" />
       </list>
     </recent_temporary>
   </component>
